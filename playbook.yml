@@ -1,0 +1,41 @@
+- hosts: webservers
+  remote_user: danny
+  tasks:
+  - name: install git 
+    ansible.builtin.apt:
+      name: git
+      state: present
+    become: yes
+    tags: apps
+
+  - name: install make
+    ansible.builtin.apt:
+      name: make
+      state: present
+    become: yes
+    tags: apps
+
+  - name: install nodejs
+    ansible.builtin.apt:
+      name: make 
+      state: present
+    become: yes
+    tags: apps
+
+  - name: create arya
+    ansible.builtin.user:
+      name: arya
+    become: yes
+    tags: users
+
+  - name: create sansa
+    ansible.builtin.user:
+      name: sansa
+    become: yes
+    tags: users
+
+  - name: create tirion
+    ansible.builtin.user:
+      name: tirion
+    become: yes
+    tags: users
