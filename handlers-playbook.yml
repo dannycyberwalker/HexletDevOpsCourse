@@ -1,5 +1,7 @@
 - hosts: webservers
   remote_user: danny
+  vars:
+    nginx_port: 80
   tasks: 
   - name: install nginx
     ansible.builtin.apt:
@@ -14,7 +16,7 @@
     become: yes
 
   - name: copy nginx cfg
-    ansible.builtin.copy:
+    ansible.builtin.template:
       src: files/nginx.conf
       dest: /etc/nginx/nginx.conf
     become: yes
