@@ -6,9 +6,20 @@
   tasks: 
   - name: install nginx
     ansible.builtin.apt:
-      name: nginx
-      state: latest
+      state: present
+      name: 
+        - nginx
+        - cowsay
     become: yes
+
+  - name: Execute uptime
+    ansible.builtin.shell: uptime -p
+    register: uptime_result
+
+  - name: Execute cowsay
+    ansible.builtin.shell: 
+      cmd: cowsay "{{ uptime_result.stdout | upper }}"
+    register: cowsay_result
 
   - name: copy page
     ansible.builtin.template:
