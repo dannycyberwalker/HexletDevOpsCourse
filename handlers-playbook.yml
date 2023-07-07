@@ -1,4 +1,5 @@
 - hosts: webservers
+  gather_facts: no
   remote_user: danny
   vars:
     nginx_port: 80
