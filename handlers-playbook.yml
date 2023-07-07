@@ -10,10 +10,12 @@
     become: yes
 
   - name: copy page
-    ansible.builtin.copy:
+    ansible.builtin.template:
       src: files/index.html
       dest: /usr/share/nginx/html/index.html
     become: yes
+    notify: 
+      - restart nginx
 
   - name: copy nginx cfg
     ansible.builtin.template:
