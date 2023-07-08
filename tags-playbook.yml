@@ -1,5 +1,10 @@
 - hosts: webservers
   remote_user: danny
+  vars:
+    users:
+      - tiron
+      - arya
+      - sansa
   tasks:
   - name: install git 
     ansible.builtin.apt:
@@ -14,38 +19,20 @@
     ansible.builtin.user:
       name: "{{ item }}"
       state: present
-    loop:
-      - tiron
-      - arya
-      - sansa
+    loop: '{{ users }}'
     become: yes
 
   - name: Paste git configs 
     ansible.builtin.template:
       src: files/.gitconfig
       dest: "/home/{{ item }}/.gitconfig"
-    loop: 
-      - tiron
-      - arya
-      - sansa
+    loop: '{{ users }}'
     become: yes
 
-  - name: Create ssh directory
-    file:
-      path: "/home/{{ item }}/.ssh"
-      state: directory
-    loop:
-      - tiron
-      - arya
-      - sansa
+  - name: Add public keys
+    ansible.posix.authorized_key:
+      user: '{{ item }}'
+      state: present
+      key: "{{ lookup('file', '/home/main/.ssh/id_rsa.pub') }}"
     become: yes
-
-  - name: Copy public ssh key
-    ansible.builtin.copy:
-      src: /home/main/.ssh/id_rsa.pub
-      dest: "/home/{{ item }}/.ssh/authorized_keys"
-    loop: 
-      - tiron
-      - arya
-      - sansa
-    become: yes 
+    loop: '{{ users }}' 
